@@ -171,6 +171,12 @@
                 </table>
             </div>
             <div class="col-md-3">
+                <form method="post" th:action="@{/}">
+                    <input class="form-control" type="text" name="cookie" id="cookie" th:value="${cookie}"/>
+                    <input class="form-control" type="submit" value="Zapisz cookie"/>
+                </form>
+            </div>
+            <div class="col-md-3">
                 <a th:href="@{/run}">
                     <button type="button" class="btn btn-info">Włącz worker</button>
                 </a>

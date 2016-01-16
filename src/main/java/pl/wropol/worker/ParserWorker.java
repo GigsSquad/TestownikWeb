@@ -7,6 +7,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import pl.wropol.model.ActivityType;
 import pl.wropol.model.Lecturer;
@@ -44,17 +45,23 @@ public class ParserWorker implements Runnable {
     private String CONDITION_TO_WAIT = "odśwież stronę, aby przeglądać wybrane opinie o prowadzących.";
     private long INTERVAL = 600;
 
+    @Value("${cookie}")
     String cookie;
 
     private void login() {
         try {
-            Connection.Response res = Jsoup.connect("http://polwro.pl/login.php")
-                    .data("username", "evelan", "password", "123456789", "redirect", "", "login", "Zaloguj")
+            Connection.Response res = Jsoup.connect("http://polwro.pl/login.php?redirect=")
+                    .data("username", "evelan")
+                    .data("password", "123456789")
+                    .data("redirect", "")
+                    .data("login", "Zaloguj")
                     .method(Connection.Method.POST)
                     .userAgent(userAgent)
                     .execute();
 
+            log.info(res.cookies());
             cookie = res.cookie("bb038dfef1_sid");
+            log.info(cookie);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -65,6 +72,7 @@ public class ParserWorker implements Runnable {
         log.info("Parsowanie...");
         for (String linkToGroup : getLinksOfGroups()) {
             Elements topics = getAllTopics(linkToGroup);
+            log.info("LinkToGroup: " + linkToGroup);
             for (Element tutor : topics) {
                 log.info("Prowadzacy: " + tutor.text());
                 if (tutor.text().length() > 30)
