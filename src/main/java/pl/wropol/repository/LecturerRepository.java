@@ -10,7 +10,9 @@ import java.util.List;
  * Created by Rafal on 2016-01-15.
  */
 @Repository
-public interface LecturerRepository extends JpaRepository<Lecturer,Long> {
+public interface LecturerRepository extends JpaRepository<Lecturer, Long> {
 
- List<Lecturer> findAllByName(String name);
+    List<Lecturer> findAllByName(String name);
+
+    Lecturer findOneByName(String name);
 }

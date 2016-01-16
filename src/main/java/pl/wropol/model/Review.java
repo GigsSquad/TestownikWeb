@@ -25,15 +25,15 @@ public class Review {
 
     private Date created;
 
-    @ManyToOne
-    @JoinColumn(name = "lecturer_id")
-    private Lecturer lecturer;
+    private Date postDate;
 
-    public Review(String nameOfTutor, Double rating, String text) {
-        this.lecturer = new Lecturer(nameOfTutor);
-        this.text = text;
-        this.rating = rating;
-    }
+    @Enumerated(EnumType.STRING)
+    private ActivityType activityType;
+
+    private boolean stolen;
+
+    @ManyToOne(cascade = {CascadeType.REFRESH, CascadeType.MERGE})
+    private Lecturer lecturer;
 
     public Review() {
 
