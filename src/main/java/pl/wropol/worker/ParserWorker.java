@@ -1,13 +1,11 @@
 package pl.wropol.worker;
 
 import lombok.extern.log4j.Log4j;
-import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import pl.wropol.model.ActivityType;
 import pl.wropol.model.Lecturer;
@@ -35,8 +33,7 @@ public class ParserWorker implements Runnable {
 
     @Autowired
     LecturerService lecturerService;
-    @Value("${cookie}")
-    String cookie;
+    private String cookie;
     private String BASE_URL = "http://polwro.pl/";
     private String LINK_TO_GROUPS = BASE_URL + "index.php?c=6";
     private int NEXT_TOPICS_PAGE = 50;
@@ -44,25 +41,6 @@ public class ParserWorker implements Runnable {
     private String userAgent = "Chrome/41.0.2228.0";
     private String CONDITION_TO_WAIT = "odśwież stronę, aby przeglądać wybrane opinie o prowadzących.";
     private long INTERVAL = 600;
-
-    private void login() {
-        try {
-            Connection.Response res = Jsoup.connect("http://polwro.pl/login.php?redirect=")
-                    .data("username", "evelan")
-                    .data("password", "123456789")
-                    .data("redirect", "")
-                    .data("login", "Zaloguj")
-                    .method(Connection.Method.POST)
-                    .userAgent(userAgent)
-                    .execute();
-
-            log.info(res.cookies());
-            cookie = res.cookie("bb038dfef1_sid");
-            log.info(cookie);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 
     public void invoke() {
         log.info("Parsowanie...");
