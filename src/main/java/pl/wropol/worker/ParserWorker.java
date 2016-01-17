@@ -35,18 +35,15 @@ public class ParserWorker implements Runnable {
 
     @Autowired
     LecturerService lecturerService;
-
+    @Value("${cookie}")
+    String cookie;
     private String BASE_URL = "http://polwro.pl/";
     private String LINK_TO_GROUPS = BASE_URL + "index.php?c=6";
     private int NEXT_TOPICS_PAGE = 50;
     private int NEXT_REVIEW_PAGE = 25;
     private String userAgent = "Chrome/41.0.2228.0";
-
     private String CONDITION_TO_WAIT = "odśwież stronę, aby przeglądać wybrane opinie o prowadzących.";
     private long INTERVAL = 600;
-
-    @Value("${cookie}")
-    String cookie;
 
     private void login() {
         try {
@@ -68,7 +65,6 @@ public class ParserWorker implements Runnable {
     }
 
     public void invoke() {
-        login();
         log.info("Parsowanie...");
         for (String linkToGroup : getLinksOfGroups()) {
             Elements topics = getAllTopics(linkToGroup);

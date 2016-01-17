@@ -39,11 +39,16 @@ public class LecturerServiceImpl implements LecturerService {
 
     @Override
     public boolean exist(String name) {
-        return null != findOneByName(name);
+        return null != findOneByNameLike(name);
     }
 
     @Override
-    public Lecturer findOneByName(String nameOfTutor) {
-        return repository.findOneByName(nameOfTutor);
+    public List<Lecturer> findOneByNameLike(String nameOfTutor) {
+        return repository.findOneByNameLike(nameOfTutor);
+    }
+
+    @Override
+    public Lecturer findOneByName(String lecturerName) {
+        return repository.findAllByName(lecturerName);
     }
 }

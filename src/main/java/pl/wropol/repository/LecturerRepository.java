@@ -12,7 +12,7 @@ import java.util.List;
 @Repository
 public interface LecturerRepository extends JpaRepository<Lecturer, Long> {
 
-    List<Lecturer> findAllByName(String name);
+    Lecturer findAllByName(String name);
 
-    Lecturer findOneByName(String name);
+    List<Lecturer> findOneByNameLike(String name);
 }

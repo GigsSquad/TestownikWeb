@@ -3,6 +3,7 @@ package pl.wropol.service.review;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import pl.wropol.model.Lecturer;
 import pl.wropol.model.Review;
 import pl.wropol.repository.LecturerRepository;
 import pl.wropol.repository.ReviewRepository;
@@ -40,12 +41,16 @@ public class ReviewServiceImpl implements ReviewService {
     @Override
     @Transactional
     public void save(Review entity) {
-
         Review review = repository.findByTextAndPostDate(entity.getText(), entity.getPostDate());
         boolean reviewExist = review != null;
         if (!reviewExist) {
             entity.setCreated(new Date());
             repository.save(entity);
         }
+    }
+
+    @Override
+    public List<Review> findByLecturer(Lecturer lecturer) {
+        return repository.findByLecturer(lecturer);
     }
 }
