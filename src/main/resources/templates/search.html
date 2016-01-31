@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+
+<head th:replace="template :: head"></head>
+<body class="container">
+
+<!-- Navigation -->
+<nav th:replace="template :: navigation"></nav>
+
+<!-- Header -->
+<div class="row">
+<style>
+    body {
+        padding-top: 70px;
+    }
+</style>
+
+    <div class="alert alert-warning" th:if="${error != null}">
+        <strong>Warning</strong>
+        <small th:text="'Nie znaleziono prowadzącego o nazwie: ' + ${error}"></small>
+    </div>
+
+
+    <div class="col-lg-6 col-lg-offset-3">
+        <form th:action="@{/search/review}" method="get" role="form">
+            <div class="form-group input-group">
+                <input type="text" name="lecturer"
+                       class="form-control"
+                       placeholder="Wpisz prowadzącego..."
+                       list="lecturers"
+                       data-minchars="2"
+                       data-maxitems="10"/>
+                      <span class="input-group-btn">
+                          <button class="btn btn-default" type="button">
+                              <i class="fa fa-search"></i>
+                          </button>
+                      </span>
+
+
+                <datalist id="lecturers">
+                    <option th:each="lecturer: *{lecturerList}"
+                            th:text="${lecturer.name}"></option>
+                </datalist>
+            </div>
+        </form>
+    </div>
+
+
+
+    <div class="row" th:unless="${#lists.isEmpty(reviewList)}">
+        <div class="col-lg-12">
+            <h3 th:text="'Oceny dla: ' + ${lecturerName}" class="text-center"></h3>
+        </div>
+    </div>
+    <div class="row" th:unless="${#lists.isEmpty(reviewList)}">
+        <div class="col-md-12">
+
+            <table id="review-table" class="table">
+                <thead>
+                <tr>
+                    <th width="10%">Ocena</th>
+                    <th width="90%">Tekst</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="review: *{reviewList}">
+                    <td>
+                        <button type="button" class="btn btn-success" th:text="${review.rating}"></button>
+                    </td>
+                    <td th:text="${review.text}"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <script>
+            $(document).ready(function () {
+
+
+                $('#review-table').dynatable({
+                    features: {
+                        paginate: false,
+                        sort: true,
+                        pushState: false,
+                        search: false,
+                        recordCount: false
+                    }
+                });
+
+            });
+        </script>
+    </div>
+</div>
+</body>
+
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

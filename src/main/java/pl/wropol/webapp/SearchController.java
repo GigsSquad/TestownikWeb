@@ -43,22 +43,20 @@ public class SearchController {
         return lecturerService.count();
     }
 
-    @RequestMapping(value = "/search/lecturer", method = RequestMethod.GET)
-    public String searchLecturer(@RequestParam(value = "q") String lecturerName, Model model) {
-        lecturerName = lecturerName.replace("+", " ");
-        lecturerName = "%" + lecturerName + "%";
-        List<Lecturer> lecturerList = lecturerService.findOneByNameLike(lecturerName);
-        model.addAttribute("lecturerList", lecturerList);
-        return "index";
-    }
-
     @RequestMapping(value = "/search/review", method = RequestMethod.GET)
-    public String searchReviews(@RequestParam(value = "id") String lecturerId, Model model) {
-        Lecturer lecturer = lecturerService.findOne(Long.valueOf(lecturerId));
-        List<Review> reviewList = reviewService.findByLecturer(lecturer);
-        model.addAttribute("reviewList", reviewList);
-        model.addAttribute("lecturerName", lecturer.getName());
-        return "index";
+    public String searchReviews(@RequestParam(value = "lecturer") String lecturerName, Model model) {
+        lecturerName = lecturerName.replace("+", " ");
+        Lecturer lecturer = lecturerService.findOneByName(lecturerName);
+
+        if (lecturer == null) {
+            model.addAttribute("error", lecturerName);
+            return "search";
+        } else {
+            List<Review> reviewList = reviewService.findByLecturer(lecturer);
+            model.addAttribute("reviewList", reviewList);
+            model.addAttribute("lecturerName", lecturer.getName());
+            return "search";
+        }
     }
 
 }

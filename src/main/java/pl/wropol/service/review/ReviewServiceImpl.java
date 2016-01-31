@@ -1,6 +1,7 @@
 package pl.wropol.service.review;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pl.wropol.model.Lecturer;
@@ -24,16 +25,19 @@ public class ReviewServiceImpl implements ReviewService {
     LecturerRepository lecturerRepository;
 
     @Override
+    @Cacheable(cacheNames = "reviews")
     public List<Review> findAll() {
         return repository.findAll();
     }
 
     @Override
+    @Cacheable(cacheNames = "countReviews")
     public Long count() {
         return repository.count();
     }
 
     @Override
+    @Cacheable(cacheNames = "review", key = "#id")
     public Review findOne(Long id) {
         return repository.findOne(id);
     }
@@ -50,6 +54,7 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
+    @Cacheable(cacheNames = "reviews", key = "#lecturer.name")
     public List<Review> findByLecturer(Lecturer lecturer) {
         return repository.findByLecturer(lecturer);
     }

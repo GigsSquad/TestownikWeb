@@ -35,6 +35,8 @@ public class Review {
     @ManyToOne(cascade = {CascadeType.REFRESH, CascadeType.MERGE})
     private Lecturer lecturer;
 
+
+
     public Review() {
 
     }

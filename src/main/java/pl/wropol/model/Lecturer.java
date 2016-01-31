@@ -29,11 +29,17 @@ public class Lecturer {
     @ManyToOne
     private University university;
 
+    private Long views = 0L;
+
     public Lecturer() {
     }
 
     public Lecturer(String name) {
         this.name = name;
+    }
+
+    public void incrementViews() {
+        this.views++;
     }
 
     public void addReview(Review review) {
